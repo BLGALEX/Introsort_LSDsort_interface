@@ -38,7 +38,8 @@ int Getdigit(unsigned int number, int digit)
  */
 void LSDSort(int* first, int* last)
 {
-	int length = (abs((char)first - (char)last))/4; //определяем количество элементов в массиве
+	int length = ((int)last - (int)first)/4 + 1; //определяем количество элементов в массиве
+	length /= 4;
 	length++;
 	unsigned int* buffer = new unsigned int[length]; 
 	unsigned int* first_u = new unsigned int[length];

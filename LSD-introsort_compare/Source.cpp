@@ -80,7 +80,7 @@ void random_numbers(int N = 10)
 	}
 	int LSD_time1, LSD_time2, Introsort_time1, Introsort_time2;
 	LSD_time1 = clock();
-	LSDSort(LSD_array_main, LSD_array_main + N - 1);
+	LSDSort(LSD_array_main, LSD_array_main + N*4 -4);
 	LSD_time2 = clock();
 	Introsort_time1 = clock();
 	Introsort(Introsort_array_main, N);
@@ -98,9 +98,14 @@ void random_numbers(int N = 10)
 
 int main()
 {
-	float arr[20] = {2147000000, 1, 2147000000, 2, -2147000000, 3, 0, 4, 0, 5, -2147000000, 6, 1, 7, 7, 8, 9, 9, 5, 10};
+	int arr[20000] = {2147000000};
+	srand(time(NULL));
+	for (int i = 0; i < 20000; i++)
+	{
+		arr[i] = rand();
+	}
+	LSDSort(arr, arr+ 20000-1);
 
-	Introsort(arr, 20);
 	std::cout << "Press 1 to get 10 random numbers statistics \n";
 	std::cout << "Press 2 to get 1000 random numbers statistics\n";
 	std::cout << "Press 3 to get 100000 random numbers statistics\n";

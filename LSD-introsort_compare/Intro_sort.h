@@ -41,7 +41,7 @@ void swap(T* a, T* b)
 template<class T>
 void HeapSetUp(T* left, T* right) // приводим к куче, чтобы a[i] <= a[2*i+1] && a[i] <=a[i*2+2]
 {
-	int n = ((char)right - (char)left) / sizeof(T) + 1;
+	int n = (((int)right - (int)left) / sizeof(T)) + 1;
 	for (int i = n / 2 - 1; i >= 0; i--) // начинаем просеивать с n/2-1 элемента
 	{
 		for (int j = i; j <= n / 2 - 1; )
@@ -86,7 +86,7 @@ template<class T>
 void HeapSort(T* left, T* right)
 {
 	HeapSetUp(left, right);// сначала приводим к куче, где большие элементы внизу
-	int n = ((char)right - (char)left) / sizeof(T) + 1;
+	int n = ((int)right - (int)left) / sizeof(T) + 1;
 	for (int i = n; i > 0; i--)//после каждой итерации дерево становится отсортированным с конца на ещё на один элемент
 		//поэтому мы работаем каждый раз с деревом меньшим на 1 элемент с конца
 	{
