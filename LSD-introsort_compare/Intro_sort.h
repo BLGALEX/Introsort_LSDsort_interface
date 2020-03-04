@@ -1,21 +1,32 @@
-#ifndef Intro_sort
-#define Intro_sort
+#pragma once
+
+
 
 // Лепёха А.А. Б8118-09.03.04прогин(2)
 
 /**
- * Входные данные: два указателя на ячейки памяти
+ * Данная вариация интроспективной сортировки работяет для любых типов
+ * для которых определны операции стравнения
  *
- * Выходные данные: две ячейки памяти
  *
- * Меняет местами данные, хранящиеся в двух ячейках памяти
  *
- * @param *a - указатель на ячейку памяти
- * @param *b - указатель на ячейку памяти
+ *
  */
-void swap(int* a, int* b)
+
+ /**
+  * Входные данные: два указателя на ячейки памяти
+  *
+  * Выходные данные: две ячейки памяти
+  *
+  * Меняет местами данные, хранящиеся в двух ячейках памяти
+  *
+  * @param *a - указатель на ячейку памяти
+  * @param *b - указатель на ячейку памяти
+  */
+template<class T>
+void swap(T* a, T* b)
 {
-	int temp = a[0];
+	T temp = a[0];
 	a[0] = b[0];
 	b[0] = temp;
 }
@@ -30,9 +41,10 @@ void swap(int* a, int* b)
  * @param *left - указатель на первый элемент участка массива
  * @param *right - указатель на последний элемент участка массива
  */
-void HeapSetUp(int* left, int* right) // приводим к куче, чтобы a[i] <= a[2*i+1] && a[i] <=a[i*2+2]
+template<class T>
+void HeapSetUp(T* left, T* right) // приводим к куче, чтобы a[i] <= a[2*i+1] && a[i] <=a[i*2+2]
 {
-	int n = ((int)right - (int)left) / sizeof(int) + 1;
+	int n = ((char)right - (char)left) / sizeof(T) + 1;
 	for (int i = n / 2 - 1; i >= 0; i--) // начинаем просеивать с n/2-1 элемента
 	{
 		for (int j = i; j <= n / 2 - 1; )
@@ -73,10 +85,11 @@ void HeapSetUp(int* left, int* right) // приводим к куче, чтобы a[i] <= a[2*i+1]
  * @param *left - указатель на первый элемент участка массива
  * @param *right - указатель на последний элемент участка массива
  */
-void HeapSort(int* left, int* right)
+template<class T>
+void HeapSort(T* left, T* right)
 {
 	HeapSetUp(left, right);// сначала приводим к куче, где большие элементы внизу
-	int n = ((int)right - (int)left) / sizeof(int) + 1;
+	int n = ((char)right - (char)left) / sizeof(T) + 1;
 	for (int i = n; i > 0; i--)//после каждой итерации дерево становится отсортированным с конца на ещё на один элемент
 		//поэтому мы работаем каждый раз с деревом меньшим на 1 элемент с конца
 	{
@@ -124,7 +137,8 @@ void HeapSort(int* left, int* right)
  * @param actuall_len - изначальное количество элементов массива
  * @param deep - глубина рекурсии (изначально == 1)
  */
-void realIntrosort(int* arr, int left, int right, int actuall_len, int deep)
+template <class T>
+void realIntrosort(T* arr, int left, int right, int actuall_len, int deep)
 {
 	if (log(actuall_len) < deep)
 	{
@@ -132,7 +146,7 @@ void realIntrosort(int* arr, int left, int right, int actuall_len, int deep)
 	}
 	else
 	{
-		int pivot; // разрешающий элемент
+		T pivot; // разрешающий элемент
 		int l_hold = left; //левая граница
 		int r_hold = right; // правая граница
 		pivot = arr[left];
@@ -154,35 +168,30 @@ void realIntrosort(int* arr, int left, int right, int actuall_len, int deep)
 			}
 		}
 		arr[left] = pivot; // ставим разрешающий элемент на место
-		pivot = left;
+		int piv = left;
 		left = l_hold;
 		right = r_hold;
 		deep++;
-		if (left < pivot) // Рекурсивно вызываем сортировку для левой и правой части массива
-			realIntrosort(arr, left, pivot - 1, actuall_len, deep);
-		if (right > pivot)
-			realIntrosort(arr, pivot + 1, right, actuall_len, deep);
+		if (left < piv) // Рекурсивно вызываем сортировку для левой и правой части массива
+			realIntrosort(arr, left, piv - 1, actuall_len, deep);
+		if (right > piv)
+			realIntrosort(arr, piv + 1, right, actuall_len, deep);
 
 	}
 }
 
 /**
- * Входные данные: указатель на начало массива и номер элемента с которого нужно сортровать и номер элемнта до которого нужно сортировать
+ * Входные данные: указатель на начало массива и размер данного массива
  *
- * Выходные данные: отсортированныя часть массива
+ * Выходные данные: отсортированный массив
  *
  * Функция считает сколько элементов в области массива и вызывает другую функцию, которая уже выполняет сортировку
  *
  * @param *arr - указатель на ячейку памяти
- * @param left - номер первого элемента массива в памяти
- * @param left - номер последнего элемента массива в памяти
+ * @param n - количество элементов в массиве
  */
-void Introsort(int* arr, int left, int right)
+template<class T>
+void Introsort(T* arr, int n)
 {
-	int n = right - left + 1;
-	realIntrosort(arr, left, right, n, 1);
+	realIntrosort(arr, 0, n - 1, n, 1);
 }
-
-
-
-#endif

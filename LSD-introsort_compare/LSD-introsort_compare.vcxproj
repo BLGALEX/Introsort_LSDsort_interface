@@ -138,7 +138,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Introsort_template.h" />
     <ClInclude Include="Intro_sort.h" />
     <ClInclude Include="LSD_sort.h" />
   </ItemGroup>
