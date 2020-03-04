@@ -77,11 +77,11 @@ int main()
 	{
 		switch (get_key)
 		{
-		case'1':
-		case'2':
-		case'3':
-		case'4':
-		default: std::cout << "Wrong key, press any key to continue"; get_key = _getch(); system("cls");
+		case'1': std::cout << 1; break;
+		case'2': std::cout << 1; break;
+		case'3': std::cout << 1; break;
+		case'4': std::cout << 1; break;
+		default: std::cout << "Wrong key, press any key to continue"; get_key = _getch(); system("cls"); break;
 		}
 		std::cout << "Press 1 to get 10 random numbers statistics \n";
 		std::cout << "Press 2 to get 1000 random numbers statistics \n";
