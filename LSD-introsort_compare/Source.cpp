@@ -2,10 +2,12 @@
 #include<time.h>
 #include <ctime>
 #include<conio.h>
+#include <intrin.h>;
 #include"Intro_sort.h"
 #include"LSD_sort.h"
+#include"LSD_sort_test.h"
 
-
+#pragma intrinsic(__rdtsc)
 struct check_stable
 {
 	int key;
@@ -78,18 +80,18 @@ void random_numbers(int N = 10)
 		Introsort_array_stable[i].key = x;
 		Introsort_array_stable[i].check = i;
 	}
-	int LSD_time1, LSD_time2, Introsort_time1, Introsort_time2;
-	LSD_time1 = clock();
-	LSDSort(LSD_array_main, LSD_array_main + N*4 -4);
-	LSD_time2 = clock();
-	Introsort_time1 = clock();
+	__int64 LSD_time1, LSD_time2, Introsort_time1, Introsort_time2;
+	LSD_time1 = __rdtsc();
+	LSDSort_test(LSD_array_main, N);
+	LSD_time2 = __rdtsc();
+	Introsort_time1 = __rdtsc();
 	Introsort(Introsort_array_main, N);
-	Introsort_time2 = clock();
+	Introsort_time2 = __rdtsc();
 	system("cls");
 	std::cout << "LSDsort time: ";
-	std::cout << LSD_time2 - LSD_time2 << std::endl;
+	std::cout << (float)((LSD_time2 - LSD_time1)/ 2401000000.) << std::endl;
 	std::cout << "Introsort time ";
-	std::cout << Introsort_time2 - Introsort_time1 << std::endl;
+	std::cout << (float)((Introsort_time2 - Introsort_time1)/ 2401000000.) << std::endl;
 	std::cout << "Press any key to continue ";
 	_getch();
 	system("cls");
@@ -98,13 +100,13 @@ void random_numbers(int N = 10)
 
 int main()
 {
-	int arr[20000] = {2147000000};
+	int arr[100000] = {2147000000};
 	srand(time(NULL));
-	for (int i = 0; i < 20000; i++)
+	for (int i = 0; i < 100000; i++)
 	{
 		arr[i] = rand();
 	}
-	LSDSort(arr, arr+ 20000-1);
+	LSDSort_test(arr, 100000);
 
 	std::cout << "Press 1 to get 10 random numbers statistics \n";
 	std::cout << "Press 2 to get 1000 random numbers statistics\n";
