@@ -6,7 +6,7 @@
 #include<random>
 #include"Intro_sort.h"
 #include"LSD_sort.h"
-#include"LSD_sort_test.h"
+
 
 #pragma intrinsic(__rdtsc)
 struct check_stable
@@ -87,7 +87,7 @@ void random_numbers(int N = 10)
 	}
 	__int64 LSD_time1, LSD_time2, Introsort_time1, Introsort_time2;
 	LSD_time1 = __rdtsc();
-    LSDSort_test(LSD_array_main, N);
+    LSDSort(LSD_array_main, N);
 	LSD_time2 = __rdtsc();
 	Introsort_time1 = __rdtsc();
 	Introsort(Introsort_array_main, N);

@@ -138,9 +138,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="LSD_sort_test.h" />
-    <ClInclude Include="Intro_sort.h" />
     <ClInclude Include="LSD_sort.h" />
+    <ClInclude Include="Intro_sort.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
