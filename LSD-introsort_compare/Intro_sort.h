@@ -1,5 +1,5 @@
 #pragma once
-
+#include<iostream>
 
 
 // Лепёха А.А. Б8118-09.03.04прогин(2)

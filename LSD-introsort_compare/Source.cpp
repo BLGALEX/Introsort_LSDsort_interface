@@ -6,8 +6,6 @@
 #include<random>
 #include"Intro_sort.h"
 #include"LSD_sort.h"
-
-
 #pragma intrinsic(__rdtsc)
 struct check_stable
 {
@@ -116,7 +114,7 @@ void random_numbers(int N = 10)
 		}
 		else if (a == '3')
 		{
-			Introsort(Introsort_array_stable, N);
+			//LSDSort_check(LSDt_array_stable, N);
 			for (int i = 0; i < N; i++)
 				std::cout << Introsort_array_stable[i].key <<"  " << Introsort_array_stable[i].check << std::endl;
 		}
