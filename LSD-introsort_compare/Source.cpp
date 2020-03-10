@@ -72,6 +72,7 @@ void random_numbers(int N = 10)
 	int *Introsort_array_main = new int[N];
 	int *Introsort_array_check= new int[N];
 	check_stable* Introsort_array_stable = new check_stable[N];
+	check_stable* LSDt_array_stable = new check_stable[N];
 	int x;
 	for (int i = 0; i < N; i++)
 	{
@@ -81,6 +82,8 @@ void random_numbers(int N = 10)
 		Introsort_array_check[i] = x;
 		Introsort_array_stable[i].key = x;
 		Introsort_array_stable[i].check = i;
+		LSDt_array_stable[i].key = x;
+		LSDt_array_stable[i].check = i;
 	}
 	__int64 LSD_time1, LSD_time2, Introsort_time1, Introsort_time2;
 	LSD_time1 = __rdtsc();
@@ -89,27 +92,65 @@ void random_numbers(int N = 10)
 	Introsort_time1 = __rdtsc();
 	Introsort(Introsort_array_main, N);
 	Introsort_time2 = __rdtsc();
+	int swaps = 0, compare = 0;
+	Introsort_count(Introsort_array_check, N, &compare, &swaps);
 	system("cls");
+	std::cout << N << "  elements \n";
 	std::cout << "LSDsort time: ";
 	std::cout << (float)((LSD_time2 - LSD_time1)/ 2401000000.) << std::endl;
 	std::cout << "Introsort time ";
 	std::cout << (float)((Introsort_time2 - Introsort_time1)/ 2401000000.) << std::endl;
-	std::cout << "Press any key to continue ";
-	char a =_getch();
+	std::cout << "Introsort swaps: " << swaps<< std::endl;
+	std::cout << "Introsort compares: " << compare << std::endl << std::endl;
+	std::cout << "Press 1 to continue \n";
+	std::cout << "Press 2 to check Introsort stability \n";
+	std::cout << "Press 3 to check LSD-sort stability \n";
+	char a = _getch();
+	while (a != '1')
+	{
+		if (a == '2')
+		{
+			Introsort(Introsort_array_stable, N);
+			for (int i = 0; i < N; i++)
+				std::cout << Introsort_array_stable[i].key << "  " << Introsort_array_stable[i].check << std::endl;
+		}
+		else if (a == '3')
+		{
+			Introsort(Introsort_array_stable, N);
+			for (int i = 0; i < N; i++)
+				std::cout << Introsort_array_stable[i].key <<"  " << Introsort_array_stable[i].check << std::endl;
+		}
+		std::cout << "Press any key to continue";
+		a = _getch();
+		system("cls");
+		std::cout << N << "elements \n";
+		std::cout << "LSDsort time: ";
+		std::cout << (float)((LSD_time2 - LSD_time1) / 2401000000.) << std::endl;
+		std::cout << "Introsort time ";
+		std::cout << (float)((Introsort_time2 - Introsort_time1) / 2401000000.) << std::endl;
+		std::cout << "Introsort swaps: " << swaps << std::endl;
+		std::cout << "Introsort compares: " << compare << std::endl << std::endl;
+		std::cout << "Press 1 to continue \n";
+		std::cout << "Press 2 to check Introsort stability \n";
+		std::cout << "Press 3 to check LSD-sort stability \n";
+		a = _getch();
+	}
+	
 	system("cls");
 }
 
 
 int main()
 {
-	int* arr = new int[1000000];
+	int* arr = new int[10000];
 	std::random_device rd;
 	std::mt19937 mersenne(rd());
-	for (int i = 0; i < 1000000; i++)
+	for (int i = 0; i < 10000; i++)
 	{
 		arr[i] = (mersenne() - 2147483648);
 	}
-	LSDSort_test(arr, 1000000);
+	int swaps = 0, compare = 0;
+	Introsort_count(arr, 10000, &compare, &swaps);
 
 	std::cout << "Press 1 to get 10 random numbers statistics \n";
 	std::cout << "Press 2 to get 1000 random numbers statistics\n";

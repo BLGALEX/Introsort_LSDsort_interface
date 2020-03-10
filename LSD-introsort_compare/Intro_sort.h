@@ -192,3 +192,151 @@ void Introsort(T* arr, int n)
 {
 	realIntrosort(arr, 0, n - 1, n, 1);
 }
+
+
+
+/**
+ * Далее идёт повтор интроспективной сортировки, но со счётчиками 
+ * для обменов и сравнений
+ */
+
+template<class T>
+void HeapSetUp_count(T* left, T* right, int* compare, int* swaps) // приводим к куче, чтобы a[i] <= a[2*i+1] && a[i] <=a[i*2+2]
+{
+	int n = (((int)right - (int)left) / sizeof(T)) + 1;	
+	for (int i = n / 2 - 1; i >= 0; i--) // начинаем просеивать с n/2-1 элемента
+	{
+		for (int j = i; j <= n / 2 - 1; )
+		{
+			if ((j * 2 + 2) > (n - 1))
+			{
+				if (left[j * 2 + 1] < left[j])
+				{
+					swap(&left[j * 2 + 1], &left[j]);
+					swaps[0]++;
+					j = j * 2 + 1;
+					compare[0]++;
+				}
+				else { compare[0]++; break;}
+			}
+			else if (left[j * 2 + 1] < left[j * 2 + 2] && (left[j * 2 + 1] < left[j]))
+			{
+				swap(&left[j * 2 + 1], &left[j]);
+				j = j * 2 + 1;
+				swaps[0]++;
+				compare[0] += 2;
+			}
+			else if (left[j * 2 + 2] < left[j])
+			{
+				swap(&left[j * 2 + 2], &left[j]);
+				j = j * 2 + 2;
+				swaps[0]++;
+				compare[0] += 3;
+			}
+			else {compare[0] += 3; break;}
+		}
+	}
+}
+
+
+template<class T>
+void HeapSort_count(T* left, T* right, int* compare, int* swaps)
+{
+	HeapSetUp_count(left, right,  compare, swaps);// сначала приводим к куче, где большие элементы внизу
+	int n = ((int)right - (int)left) / sizeof(T) + 1;
+	for (int i = n; i > 0; i--)//после каждой итерации дерево становится отсортированным с конца на ещё на один элемент
+		//поэтому мы работаем каждый раз с деревом меньшим на 1 элемент с конца
+	{
+		swap(&left[0], &left[i - 1]);// ставим наименьший элемент текущего дерева в конец и элемент с конца просеиваем через всё оставшееся дерево
+		swaps[0]++;
+		for (int j = 0; j < (i + 1) / 2 - 1; )
+		{
+			if ((j * 2 + 2) >= (i - 1))
+			{
+				if (left[j * 2 + 1] < left[j])
+				{
+					swap(&left[j * 2 + 1], &left[j]);
+					j = j * 2 + 1;
+					swaps[0]++;
+					compare[0] ++;
+				}
+				else { compare[0]++; break; }
+			}
+			else if (left[j * 2 + 1] < left[j * 2 + 2] && (left[j * 2 + 1] < left[j]))
+			{
+				swap(&left[j * 2 + 1], &left[j]);
+				j = j * 2 + 1;
+				swaps[0]++;
+				compare[0] += 2;
+			}
+			else if (left[j * 2 + 2] < left[j])
+			{
+				swap(&left[j * 2 + 2], &left[j]);
+				j = j * 2 + 2;
+				swaps[0]++;
+				compare[0] += 3;
+			}
+			else { compare[0] += 3; break; }
+		}
+	}
+	for (int i = 0; i < n / 2; i++) //выписываем дерево с конца
+		swap(&left[i], &left[n - i - 1]);
+}
+
+
+template <class T>
+void realIntrosort_count(T* arr, int left, int right, int actuall_len, int deep, int* compare, int* swaps)
+{
+	if (log(actuall_len) < deep)
+	{
+		HeapSort_count(arr + left, arr + right, compare, swaps);
+	}
+	else
+	{
+		T pivot; // разрешающий элемент
+		int l_hold = left; //левая граница
+		int r_hold = right; // правая граница
+		pivot = arr[left];
+		while (left < right) // пока границы не сомкнутся
+		{
+			while ((arr[right] >= pivot) && (left < right))
+			{
+				compare[0]++; 
+				right--;// сдвигаем правую границу пока элемент [right] больше [pivot]
+			} 
+			if (left != right) // если границы не сомкнулись
+			{
+				arr[left] = arr[right]; // перемещаем элемент [right] на место разрешающего
+				left++; // сдвигаем левую границу вправо
+				swaps[0]++;
+			}
+			while ((arr[left] <= pivot) && (left < right))
+			{
+				left++; // сдвигаем левую границу пока элемент [left] меньше [pivot]
+				compare[0]++;
+			}
+			if (left != right) // если границы не сомкнулись
+			{
+				arr[right] = arr[left]; // перемещаем элемент [left] на место [right]
+				right--; // сдвигаем правую границу вправо
+				swaps[0]++;
+			}
+		}
+		arr[left] = pivot; // ставим разрешающий элемент на место
+		int piv = left;
+		left = l_hold;
+		right = r_hold;
+		deep++;
+		if (left < piv) // Рекурсивно вызываем сортировку для левой и правой части массива
+			realIntrosort_count(arr, left, piv - 1, actuall_len, deep, compare, swaps);
+		if (right > piv)
+			realIntrosort_count(arr, piv + 1, right, actuall_len, deep, compare, swaps);
+
+	}
+}
+
+template<class T>
+void Introsort_count(T* arr, int n, int* compare, int *swaps)
+{
+	realIntrosort_count(arr, 0, n - 1, n, 1, compare, swaps );
+}
