@@ -7,11 +7,7 @@
 #include"Intro_sort.h"
 #include"LSD_sort.h"
 #pragma intrinsic(__rdtsc)
-struct check_stable
-{
-	int key;
-	int check;
-};
+
 
 bool operator >(check_stable& a, check_stable& b)
 {
@@ -74,7 +70,7 @@ void random_numbers(int N = 10)
 	int x;
 	for (int i = 0; i < N; i++)
 	{
-		x = (mersenne()- 2147483648);
+		x = (mersenne()- 2147483648)%10;
 		LSD_array_main[i] = x;
 		Introsort_array_main[i] = x;
 		Introsort_array_check[i] = x;
@@ -114,9 +110,9 @@ void random_numbers(int N = 10)
 		}
 		else if (a == '3')
 		{
-			//LSDSort_check(LSDt_array_stable, N);
+			LSDSort_check(LSDt_array_stable, N);
 			for (int i = 0; i < N; i++)
-				std::cout << Introsort_array_stable[i].key <<"  " << Introsort_array_stable[i].check << std::endl;
+				std::cout << LSDt_array_stable[i].key <<"  " << LSDt_array_stable[i].check << std::endl;
 		}
 		std::cout << "Press any key to continue";
 		a = _getch();
